@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Test Suite</title>
+<link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.20.0.css">
+
+<body>
+    <div id="qunit"></div>
+    <div id="qunit-fixture"></div>
+    <script src="https://code.jquery.com/qunit/qunit-2.20.0.js"></script>
+    <script src="../classes/Counter.js" type="text/javascript"></script>
+    <script src="../classes/Reaction.js" type="text/javascript"></script>
+    <script src="../classes/DietType.js" type="text/javascript"></script>
+    <script src="../classes/DietItem.js" type="text/javascript"></script>
+    <script src="../classes/EventManager.js" type="text/javascript"></script>
+    <script src="../classes/DietPlannerV2.js" type="text/javascript"></script>
+    <script src="../data/sampleData.js" type="text/javascript"></script>
+</body>
+<script>
+    var EXP_CODE_ORDER = ['Never', 'No', 'Rarely', 'Try', 'Some', 'Allow', 'Extra'];
+    var REACTION_ORDER = ['None', 'IgA1', 'IgG1', 'IgA2', 'IgG2', 'IgA3', 'IgG3', 'IgA4', 'IgG4', 'IgA5', 'IgG5', 'IgA6', 'IgG6', 'IgA7', 'IgG7', 'IgE0/1', 'IgE1', 'IgE2', 'IgE3', 'IgE4', 'IgE5', 'IgE6', 'IgE7'];
+    createDietPlannerV2Mock = function() {
+        var dietPlannerV2 = new DietPlannerV2();
+        dietPlannerV2.setFoodList(MASTER_DATA["Foodlist"]);
+        dietPlannerV2.setDietTypeList(MASTER_DATA["dietType"]);
+        return dietPlannerV2;
+    }
+</script>
+
+<!-- Tests -->
+<script src="DietPlannerV2Test.js"></script>

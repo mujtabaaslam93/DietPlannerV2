@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Reaction and Diet Management</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <!-- Custom CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <style>
+        .form-container {
+            margin-top: 20px;
+        }
+        
+        .container {
+            max-width: 90%;
+        }
+        
+        h5 {
+            margin-top: 40px;
+        }
+        
+        .mw-500 {
+            min-width: 500px !important;
+        }
+        
+        .recSpan-None,
+        .recSpan-IgG0,
+        .recSpan-IgE0 {
+            background-color: #ffffff !important;
+            color: White !important;
+        }
+        
+        .recSpan-IgA1,
+        .recSpan-IgG1 {
+            background-color: #ffe100 !important;
+            color: Black !important;
+        }
+        
+        .recSpan-IgA2,
+        .recSpan-IgG2 {
+            background-color: #ffc000 !important;
+            color: White !important;
+        }
+        
+        .recSpan-IgA3,
+        .recSpan-IgG3 {
+            background-color: #ed7d31 !important;
+            color: White !important;
+        }
+        
+        .recSpan-IgA4,
+        .recSpan-IgA5,
+        .recSpan-IgA6,
+        .recSpan-IgA7,
+        .recSpan-IgG3,
+        .recSpan-IgG4,
+        .recSpan-IgG5,
+        .recSpan-IgG6,
+        .recSpan-IgG7 {
+            background-color: #ff0000 !important;
+            color: White !important;
+        }
+        
+        .recSpan-IgE01,
+        .recSpan-IgE0\/1,
+        .recSpan-IgE1,
+        .recSpan-IgE2,
+        .recSpan-IgE3,
+        .recSpan-IgE4,
+        .recSpan-IgE5,
+        .recSpan-IgE6,
+        .recSpan-IgE7 {
+            background-color: #c00000 !important;
+            color: White !important;
+        }
+        
+        .expSpan-No {
+            background-color: #ffffff !important;
+            color: rgb(0, 0, 0) !important;
+        }
+        
+        .expSpan-Never {
+            color: white !important;
+            background-color: rgb(243, 61, 66) !important;
+        }
+        
+        .expSpan-Try {
+            color: white !important;
+            background-color: rgb(14, 158, 231) !important;
+        }
+        
+        .expSpan-Occasionally {
+            color: white !important;
+            background-color: rgb(97, 183, 71) !important;
+        }
+        
+        .expSpan-Allow {
+            color: white !important;
+            background-color: rgb(1, 113, 0) !important;
+        }
+        
+        .expSpan-Rarely {
+            color: black !important;
+            background-color: rgb(255, 246, 99) !important;
+        }
+        
+        .expSpan-Extra {
+            color: white !important;
+            background-color: rgb(8, 156, 7) !important;
+        }
+        
+        .notInDiet {
+            color: gray;
+            text-decoration: line-through;
+        }
+    </style>
+</head>
+
+<body>
+    <a style="right: 20px;position: absolute;" href="tests/" target="_blank">Run Tests</a>
+    <div class="container">
+        <h5>STEP 1 - Set Reaction</h5>
+        <!-- Form for Add Reaction -->
+        <div class="row form-container form-inline">
+            <div class="form-group">
+                <label class="mr-2 ml-2">Food Items</label>
+                <select class="form-control foodSelect mw-500" id="foodSelect">
+                <!-- Add options dynamically -->
+            </select>
+            </div>
+            <div class="form-group">
+                <label class="mr-2 ml-2">Reactions</label>
+                <select class="form-control reactionSelect" id="reactionSelect">
+                <!-- Add options dynamically -->
+            </select>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary ml-3" id="addReactionBtn">Add Reaction</button>
+            </div>
+        </div>
+
+        <h5>STEP 2 - Select Diet Type</h5>
+        <!-- Form for Add Diet Type -->
+        <div class="row form-container form-inline">
+            <div class="form-group">
+                <label class="mr-2 ml-2">Diet Types</label>
+                <select class="form-control dietSelect mw-500" id="dietSelect">
+                <!-- Add options dynamically -->
+            </select>
+            </div>
+            <div class="form-group">
+                <label class="mr-2 ml-2">Experiment Levels</label>
+                <select class="form-control experimentSelect" id="experimentSelect">
+                <!-- Add options dynamically -->
+            </select>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary ml-3" id="addDietTypeBtn">Add Diet Type</button>
+            </div>
+        </div>
+
+        <h5>STEP 2 - Diet Type Manual Overrides</h5>
+        <!-- Form for Add Diet Type Override -->
+        <div class="row form-container form-inline">
+            <div class="form-group">
+                <label class="mr-2 ml-2">Selected Diet Types</label>
+                <select class="form-control selectedDietSelect mw-500" id="dietDietOverrideSelect">
+                <!-- Add options dynamically -->
+            </select>
+            </div>
+            <div class="form-group">
+                <label class="mr-2 ml-2">Diet Type Food Items</label>
+                <select class="form-control dietTypeFoodSelect mw-500" id="foodDietOverrideSelect">
+                <!-- Add options dynamically -->
+            </select>
+            </div>
+            <div class="form-group">
+                <label class="mr-2 ml-2">Experiment Levels</label>
+                <select class="form-control experimentSelect" id="experimentDietOverrideSelect">
+                <!-- Add options dynamically -->
+            </select>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary ml-3" id="addDietTypeOverrideBtn">Add Diet Type Override</button>
+            </div>
+        </div>
+
+        <h5>STEP 3 - Manual Overrides</h5>
+        <!-- Form for Add Override -->
+        <div class="row form-container form-inline">
+            <div class="form-group">
+                <label class="mr-2 ml-2">Food Item</label>
+                <select class="form-control foodSelect" id="foodSelectOverride">
+                <!-- Add options dynamically -->
+            </select>
+            </div>
+            <div class="form-group">
+                <label class="mr-2 ml-2">Experiment Level</label>
+                <select class="form-control experimentSelect" id="experimentSelectOverride">
+                <!-- Add options dynamically -->
+            </select>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary ml-3" id="addOverrideBtn">Add Override</button>
+            </div>
+        </div>
+
+        <h5>STEP 3 - Experiment By Reaction (Top drag and drop)</h5>
+        <!-- Form for Add Override -->
+        <div class="row form-container form-inline">
+            <div class="form-group">
+                <label class="mr-2 ml-2">Experiment Level</label>
+                <select class="form-control experimentSelect" id="experimentExperimentReactionSelect">
+                <!-- Add options dynamically -->
+            </select>
+            </div>
+            <div class="form-group">
+                <label class="mr-2 ml-2">Reaction</label>
+                <select class="form-control reactionSelect" id="reactionExperimentReactionSelect">
+                <!-- Add options dynamically -->
+            </select>
+            </div>
+            <div class="form-group" style="margin-left:10px;">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="replaceManualOverrides">
+                    <label class="form-check-label" for="replaceManualOverrides">Replace Manual Overrides</label>
+                </div>
+            </div>
+            <div class="form-group" style="margin-left:10px;">
+                <label class="mr-2 ml-2">Overrides that will be replaced</label>
+                <select class="form-control removeOverridesSelect" id="removeOverridesSelect[]" multiple="multiple">
+                <!-- Add options dynamically -->
+                </select>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary ml-3" id="addExperimentReactionBtn">Add Experiment By Reaction</button>
+            </div>
+        </div>
+        <div id="sliderRangeVal" style="font-weight: 500;color:cadetblue"></div>
+
+        <h5>STEP 3 - Has AutoImmune</h5>
+        <!-- Form for Apply Autoimmune -->
+        <div class="row form-container form-inline">
+            <div class="form-group">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="autoimmuneCheckbox">
+                    <label class="form-check-label" for="autoimmuneCheckbox">Has Autoimmune issues</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Food Table with Search -->
+        <div class="row mt-5">
+            <div class="col-md-8">
+                <h3>Food Table</h3>
+                <div class="row">
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" id="foodSearch" placeholder="Search by Food, Autoimmune, Reactions, Experimentation, In Diet">
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="showModifiedFoodOnly">
+                            <label class="form-check-label" for="showModifiedFoodOnly">Show modified foods only</label>
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-bordered mt-2" id="foodTable">
+                    <thead>
+                        <tr>
+                            <th>Food</th>
+                            <th>AutoImmune</th>
+                            <th>Reactions</th>
+                            <th>Expermentation</th>
+                            <th>Diet Types</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-4">
+                <h3>Event Table</h3>
+                <table class="table table-bordered table-striped mt-2" id="eventTable">
+                    <thead>
+                        <tr>
+                            <th>Sequence</th>
+                            <th>Event</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="classes/Counter.js" type="text/javascript"></script>
+    <script src="classes/Reaction.js" type="text/javascript"></script>
+    <script src="classes/DietType.js" type="text/javascript"></script>
+    <script src="classes/DietItem.js" type="text/javascript"></script>
+    <script src="classes/EventManager.js" type="text/javascript"></script>
+    <script src="classes/DietPlannerV2.js" type="text/javascript"></script>
+    <script src="data/sampleData.js" type="text/javascript"></script>
+
+    <!-- Custom JavaScript for Search -->
+    <script>
+        //Constants
+        var EXP_CODE_ORDER = ['Never', 'No', 'Rarely', 'Try', 'Occasionally', 'Allow', 'Extra'];
+        var REACTION_ORDER = ['None', 'IgA1', 'IgG1', 'IgA2', 'IgG2', 'IgA3', 'IgG3', 'IgA4', 'IgG4', 'IgA5', 'IgG5', 'IgA6', 'IgG6', 'IgA7', 'IgG7', 'IgE0/1', 'IgE1', 'IgE2', 'IgE3', 'IgE4', 'IgE5', 'IgE6', 'IgE7'];
+        var BACKGROUND_COLOR1 = ['#ffffff', '#ffe100', '#ffc000', '#ed7d31', '#ff0000', '#c00000'];
+        var REACTION_COLOR_CODE1 = {
+            'IgE7': 5,
+            'IgE6': 5,
+            'IgE5': 5,
+            'IgE4': 5,
+            'IgE3': 5,
+            'IgE2': 5,
+            'IgE1': 5,
+            'IgE0/1': 5,
+            'IgG7': 4,
+            'IgA7': 4,
+            'IgG6': 4,
+            'IgA6': 4,
+            'IgG5': 4,
+            'IgA5': 4,
+            'IgG4': 4,
+            'IgA4': 4,
+            'IgG3': 3,
+            'IgA3': 3,
+            'IgG2': 2,
+            'IgA2': 2,
+            'IgG1': 1,
+            'IgA1': 1,
+            'IgE0': 0,
+            'None': 0,
+            'IgG0': 0
+        };
+        var sliderRanges = {
+            "Never": [],
+            "No": [
+                "IgA1",
+                "IgG1",
+                "IgA2",
+                "IgG2",
+                "IgA3",
+                "IgG3",
+                "IgA4",
+                "IgG4",
+                "IgA5",
+                "IgG5",
+                "IgA6",
+                "IgG6",
+                "IgA7",
+                "IgG7",
+                "IgE0/1",
+                "IgE1",
+                "IgE2",
+                "IgE3",
+                "IgE4",
+                "IgE5",
+                "IgE6",
+                "IgE7"
+            ],
+            "Try": [],
+            "Rarely": [],
+            "Occasionally": [],
+            "Allow": []
+        };
+        var dietDietOverrideSelect = null;
+        var foodDietOverrideSelect = null;
+        var removeOverridesSelect = null;
+
+        const dietPlannerV2 = new DietPlannerV2();
+        dietPlannerV2.setFoodList(MASTER_DATA["Foodlist"]);
+        dietPlannerV2.setDietTypeList(MASTER_DATA["dietType"]);
+
+        setFoodTableAndSelect(dietPlannerV2.getFoodList());
+        setDietSelect(dietPlannerV2.getDietTypesList());
+        setReactionSelect(REACTION_ORDER);
+        setExperimentSelect(EXP_CODE_ORDER);
+
+        dietPlannerV2.addReaction(46, 'IgA3'); //Set IgA3 reaction for Arugula
+        dietPlannerV2.addReaction(239, 'IgE5'); // IgE5 reaction for Cucumber
+        dietPlannerV2.setDietType(67, 1); //Set Anti-Inflammatory Diet diet type with experiment level No
+        dietPlannerV2.setDietType(76, 3); //Set Lectin Free for AI Diet diet type with experiment level Try
+        dietPlannerV2.addReaction(88, 'IgE3'); //Set IgE3 reaction for Bell Pepper
+        dietPlannerV2.addReaction(560, 'IgA7'); //Set IgA7 reaction for Rice, Brown (gluten free)
+        dietPlannerV2.setAutoImmune(true);
+        sliderRanges = {
+            "Never": [],
+            "No": ["IgG2", "IgA3", "IgG3", "IgA4", "IgG4", "IgA5", "IgG5", "IgA6", "IgG6", "IgA7", "IgG7", "IgE0/1", "IgE1", "IgE2", "IgE3", "IgE4", "IgE5", "IgE6", "IgE7"],
+            "Try": ["IgA1", "IgG1", "IgA2"],
+            "Rarely": [],
+            "Occasionally": [],
+            "Allow": []
+        };
+        dietPlannerV2.setExperimentLevelByReactions(sliderRanges);
+        dietPlannerV2.setDietType(8, 4); //Set Soy Free diet type with experiment level Some
+        dietPlannerV2.setDietType(62, 4); //Set Fabaceae (beans) diet type with experiment level Some
+
+        resetDiet();
+        //////////////////////////////////
+        //      UI FUNCTIONS
+        //////////////////////////////////
+        function resetDiet() {
+            setEventTable(dietPlannerV2.getEvents(), dietPlannerV2.hasAutoImmuneIssues());
+            applyDiet(dietPlannerV2.getAllDietItems());
+        }
+
+        // Function to filter table rows based on search input
+        function filterTable() {
+            const searchText = $('#foodSearch').val().toLowerCase();
+            // Implement your logic to filter and update table rows
+        }
+
+        // Call filterTable function on input change
+        $('#foodSearch').on('input', filterTable);
+
+        function setFoodTableAndSelect(data) {
+            const foodSelect = $('.foodSelect');
+            const tableBody = $('#foodTable tbody');
+            tableBody.html('');
+            Object.entries(data).forEach(([fid, item]) => {
+                var row = `<tr id='fid-${fid}' class="foodItem">
+                        <td class="name">${fid} - ${item.Name}</td>
+                        <td>${(item.ImmuneReaction) ? '<span class="expSpan-Never">AUTOIMMUNE</span>' : ''}</td>
+                        <td class="reaction"></td>
+                        <td class="exp"></td>
+                        <td class="dttype"></td>
+                    </tr>`;
+                tableBody.append(row);
+                foodSelect.append(`<option value="${fid}">${fid}-${item.Name}</option>`);
+            });
+            $('.foodSelect').select2();
+        }
+
+        function setDietSelect(data) {
+            const dietSelect = $('.dietSelect');
+            Object.entries(data).forEach(([id, item]) => {
+                dietSelect.append(`<option value="${id}">${id}-${item.name}</option>`);
+            });
+            $('.dietSelect').select2();
+        }
+
+        function setReactionSelect(data) {
+            const reactionSelect = $('.reactionSelect');
+            for (const [idx, value] of data.entries()) {
+                reactionSelect.append(`<option value="${value}">${value}</option>`);
+            }
+        }
+
+        function setExperimentSelect(data) {
+            const experimentSelect = $('.experimentSelect');
+            for (const [idx, value] of data.entries()) {
+                experimentSelect.append(`<option value="${idx}" ${(value=='No') ? 'selected':''}>${value}</option>`);
+            }
+        }
+
+        function setSelectedDietSelect(data) {
+            if (dietDietOverrideSelect) {
+                dietDietOverrideSelect.select2('destroy');
+            }
+            dietDietOverrideSelect = $('#dietDietOverrideSelect');
+            dietDietOverrideSelect.html('<option value=""></option>');
+            Object.entries(data).forEach(([id, item]) => {
+                item = dietPlannerV2.getDietType(id);
+                dietDietOverrideSelect.append(`<option value="${id}">${id}-${item.name}</option>`);
+            });
+            $(dietDietOverrideSelect).val($('#dietDietOverrideSelect option:first').val());
+            $(dietDietOverrideSelect).select2();
+        }
+
+        function setDietTypeFoodSelect(dietTypeId) {
+            if (foodDietOverrideSelect) {
+                foodDietOverrideSelect.select2('destroy');
+                foodDietOverrideSelect.html('');
+            }
+            foodDietOverrideSelect = $('#foodDietOverrideSelect');
+            dietType = dietPlannerV2.getDietType(dietTypeId);
+            Object.entries(dietType.fooditems).forEach(([id, item]) => {
+                foodDietOverrideSelect.append(`<option value="${item.FID}">${item.FID}-${item.Name}</option>`);
+            });
+            foodDietOverrideSelect.select2();
+        }
+
+        function setEventTable(events, isAutoImmune) {
+
+            const tableBody = $('#eventTable tbody');
+            tableBody.html('');
+            var reactionExperiments = '';
+            var counter = new Counter();
+            events = Object.values(events);
+            var sortedEvents = events.sort((a, b) => a.squenceNumber - b.squenceNumber);
+            for (const event of sortedEvents) {
+                if (event.type == "reaction" || event.type == "diet_type" || event.type == "override") {
+                    var row = `<tr>
+                        <td>${counter.getNext()}</td>
+                        <td>${event.description}</td>
+                    </tr>`;
+                    tableBody.append(row);
+                }
+                if (event.type == "reaction_experiment") {
+                    reactionExperiments += `${event.description}<br/>`
+                }
+            }
+            if (reactionExperiments != '') {
+                var row = `<tr>
+                        <td>${counter.getNext()}</td>
+                        <td>${reactionExperiments}</td>
+                    </tr>`;
+                tableBody.append(row);
+            }
+            if (isAutoImmune) {
+                var row = `<tr>
+                    <td>${counter.getNext()}</td>
+                    <td>Has AutoImmune Issues</td>
+                </tr>`;
+                tableBody.append(row);
+            }
+        }
+
+        function applyDiet(data) {
+            Object.entries(data).forEach(([fid, item]) => {
+                $('#fid-' + fid).addClass('modifiedFood');
+                if (item.reaction) {
+                    var highestReaction = item.reaction.getHighestReaction();
+                    $('#fid-' + fid).find('.reaction').html(item.reaction.IgA + ',' +
+                        item.reaction.IgG + ',' +
+                        item.reaction.IgE + ' -> <b>' + REACTION_ORDER[highestReaction] + '</b>');
+                    $(`#fid-${fid} .name`).html(`<span class="recSpan-${REACTION_ORDER[highestReaction]}">${item.name}</span>`);
+                }
+                var exp = EXP_CODE_ORDER[item.getExpLevel()];
+                if (exp) {
+                    $('#fid-' + fid).find('.exp').html(`<span class="expSpan-${exp}">${exp}</span>`);
+                }
+                if (item.isFoodInDiet()) {
+                    $(`#fid-${fid} .name`).removeClass('notInDiet');
+                } else {
+                    $(`#fid-${fid} .name`).addClass('notInDiet');
+                }
+                $('#fid-' + fid).find('.dttype').html(getDietTypesAppliedText(fid));
+
+            });
+            $('.modifiedFood').show();
+            displaySliderVal();
+        }
+
+        function displaySliderVal() {
+            const filteredObject = Object.fromEntries(
+                Object.entries(sliderRanges).filter(([key, value]) => value.length > 0)
+            );
+            var str = JSON.stringify(filteredObject);
+            str = str.substring(1, str.length - 1);
+            str = replaceAllOccurrences(str, '"', '');
+            str = replaceAllOccurrences(str, '],', ']<br/>');
+            str = replaceAllOccurrences(str, ',', ' ');
+            str = replaceAllOccurrences(str, ':', ' ');
+
+            $('#sliderRangeVal').html(str);
+        }
+
+        //////////////////////////////////
+        //      EVENT HANDLERS
+        //////////////////////////////////
+        $('#autoimmuneCheckbox').change(function() {
+            dietPlannerV2.setAutoImmune(this.checked);
+            resetDiet();
+        });
+
+        $('#showModifiedFoodOnly').change(function() {
+            if (this.checked) {
+                $('.foodItem').hide();
+                $('.modifiedFood').show();
+            } else {
+                $('.foodItem').show();
+            }
+        });
+        // Add Reaction Button Click
+        $('#addReactionBtn').on('click', function() {
+            var foodItem = $('#foodSelect').val();
+            var reaction = $('#reactionSelect').val();
+            dietPlannerV2.addReaction(foodItem, reaction);
+            resetDiet();
+        });
+
+        // Add Diet Type Button Click
+        $('#addDietTypeBtn').on('click', function() {
+            var dietType = $('#dietSelect').val();
+            var experiment = $('#experimentSelect').val();
+            dietPlannerV2.setDietType(dietType, experiment);
+            setSelectedDietSelect(dietPlannerV2.dietTypesSelected);
+            resetDiet();
+        });
+
+        // Add Diet Type Override Button Click
+        $('#addDietTypeOverrideBtn').on('click', function() {
+            var dietType = $('#dietDietOverrideSelect').val();
+            var foodItem = $('#foodDietOverrideSelect').val();
+            var experiment = $('#experimentDietOverrideSelect').val();
+            console.log(dietType, foodItem, experiment);
+            dietPlannerV2.addDietOverideItem(dietType, foodItem, experiment);
+            resetDiet();
+        });
+
+        // Add Override Button Click
+        $('#addOverrideBtn').on('click', function() {
+            var foodItem = $('#foodSelectOverride').val();
+            var experiment = $('#experimentSelectOverride').val();
+            dietPlannerV2.addOverrideItem(foodItem, experiment);
+            resetDiet();
+        });
+
+        $('#dietDietOverrideSelect').change(function() {
+            var dietTypeId = $('#dietDietOverrideSelect').val();
+            setDietTypeFoodSelect(dietTypeId);
+        });
+
+        $('#addExperimentReactionBtn').on('click', function() {
+            removeOverrides();
+            var reaction = $('#reactionExperimentReactionSelect').val();
+            var targetLevelIdx = $('#experimentExperimentReactionSelect').val();
+            const targetLevel = EXP_CODE_ORDER[targetLevelIdx];
+            const currentLevel = findCurrentLevel(reaction);
+            const currentLevelIdx = EXP_CODE_ORDER.indexOf(currentLevel);
+            var itemsToMove = [];
+            if (currentLevelIdx > targetLevelIdx) {
+                itemsToMove = sliderRanges[currentLevel].splice(sliderRanges[currentLevel].indexOf(reaction));
+                sliderRanges[targetLevel] = itemsToMove.concat(sliderRanges[targetLevel]);
+                dietPlannerV2.setExperimentLevelByReactions(sliderRanges);
+                displaySliderVal();
+                resetDiet();
+            } else if (currentLevelIdx < targetLevelIdx) {
+                itemsToMove = sliderRanges[currentLevel].splice(0, sliderRanges[currentLevel].indexOf(reaction) + 1);
+                sliderRanges[targetLevel] = sliderRanges[targetLevel].concat(itemsToMove);
+                dietPlannerV2.setExperimentLevelByReactions(sliderRanges);
+                displaySliderVal();
+                resetDiet();
+            }
+        });
+        $('#replaceManualOverrides').change(function() {
+            if (this.checked) {
+                setRemoveOverridesSelect();
+            } else {
+                $('.foodItem').show();
+            }
+        });
+
+        function setRemoveOverridesSelect() {
+            if (removeOverridesSelect) {
+                removeOverridesSelect.select2('destroy');
+                removeOverridesSelect.html('');
+            }
+            removeOverridesSelect = $('.removeOverridesSelect');
+            var reactionsEffected = calculateItemToMoves();
+            var overrideItems = dietPlannerV2.getAllOverrideItems();
+            for (const foodId in overrideItems) {
+                var item = overrideItems[foodId];
+                var reactionName = REACTION_ORDER[item.reaction];
+                console.log(reactionsEffected, item, reactionName, reactionName in reactionsEffected);
+                if (reactionsEffected.includes(reactionName)) {
+                    removeOverridesSelect.append(`<option value="${foodId}" selected>${item.name}</option>`);
+
+                }
+            }
+            $(removeOverridesSelect).select2();
+        }
+
+        function calculateItemToMoves() {
+            var reaction = $('#reactionExperimentReactionSelect').val();
+            var targetLevelIdx = $('#experimentExperimentReactionSelect').val();
+            const targetLevel = EXP_CODE_ORDER[targetLevelIdx];
+            const currentLevel = findCurrentLevel(reaction);
+            const currentLevelIdx = EXP_CODE_ORDER.indexOf(currentLevel);
+            const tempSliderRanges = JSON.parse(JSON.stringify(sliderRanges));
+            var itemsToMove = [];
+            if (currentLevelIdx > targetLevelIdx) {
+                itemsToMove = tempSliderRanges[currentLevel].splice(tempSliderRanges[currentLevel].indexOf(reaction));
+
+
+            } else if (currentLevelIdx < targetLevelIdx) {
+                itemsToMove = tempSliderRanges[currentLevel].splice(0, tempSliderRanges[currentLevel].indexOf(reaction) + 1);
+
+            }
+            return itemsToMove;
+        }
+        //////////////////////////////////
+        //      UTIL FUNCTIONS
+        //////////////////////////////////
+        function findCurrentLevel(item) {
+            for (const level in sliderRanges) {
+                if (sliderRanges[level].includes(item)) {
+                    return level;
+                }
+            }
+        }
+
+        function removeOverrides() {
+
+            const foodIdArray = $(removeOverridesSelect).val();
+            console.log('Selected values:', foodIdArray);
+            if (foodIdArray.length > 0)
+                dietPlannerV2.removeOverrideItems(foodIdArray);
+
+        }
+
+        function replaceAllOccurrences(originalString, search, replacement) {
+            const regex = new RegExp(search, 'g');
+            return originalString.replace(regex, replacement);
+        }
+
+        function getDietTypesAppliedText(foodId) {
+            var dietAppliedIds = dietPlannerV2.getDietTypesAppliedByFood(foodId);
+            var dietApplied = '';
+            if (dietAppliedIds)
+                for (var dietId of dietAppliedIds) {
+                    var name = dietPlannerV2.getDietType(dietId).name;
+                    var experimentLevel = dietPlannerV2.getSelectedDietType(dietId).experimentLevel;
+                    dietApplied += `${name} -> ${EXP_CODE_ORDER[experimentLevel]}<br/>`;
+                }
+            return dietApplied;
+        }
+
+
+
+        $('#showModifiedFoodOnly').prop('checked', true);
+        $('#showModifiedFoodOnly').trigger('change');
+    </script>
+
+</body>
+
+</html>
