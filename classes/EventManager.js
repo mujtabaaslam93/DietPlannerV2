@@ -1,8 +1,7 @@
 class EventManager {
     constructor(dietPlannerV2) {
         this.dietPlannerV2 = dietPlannerV2;
-        var lastEventId = this.getLastEventId();
-        this.counter = new Counter(lastEventId);
+        this.counter = new Counter();
     }
 
     handleEvent(eventType, data) {

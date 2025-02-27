@@ -1,12 +1,14 @@
 class Counter {
-    constructor(start = 0) {
-        this.number = start;
+    constructor(start = 1) {
+        this.counter = this.createCounter(start);
     }
-    get() {
-        return this.number;
+    *createCounter(start) {
+        let number = start;
+        while (true) {
+            yield number++;
+        }
     }
     getNext() {
-        this.number = this.number + 1;
-        return this.number;
+        return this.counter.next().value;
     }
 }
